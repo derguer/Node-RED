@@ -1,0 +1,499 @@
+[
+    {
+        "id": "653793eab2d2847f",
+        "type": "group",
+        "z": "e3c9aea0482e38ad",
+        "name": "Baumer OT 500",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "755004ae4c433cff",
+            "a4cd295d986b53c9",
+            "09c1eea475a906a4",
+            "b4fa56083bd1829f",
+            "6ee50797ae6958ff",
+            "9bb965d3d2fddc62",
+            "2672aee35ad3b615",
+            "f166ff6f4093c627",
+            "038cd652e522091a",
+            "32714015a907b045",
+            "808c4c35aa84346b",
+            "79bfde52e257fde1",
+            "36eb86bfd55296d4",
+            "5b8b7ecf52fa13e3"
+        ],
+        "x": 34,
+        "y": 179,
+        "w": 1652,
+        "h": 162
+    },
+    {
+        "id": "755004ae4c433cff",
+        "type": "inject",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 300,
+        "wires": [
+            [
+                "a4cd295d986b53c9",
+                "7acc2fe7952f7edc"
+            ]
+        ]
+    },
+    {
+        "id": "a4cd295d986b53c9",
+        "type": "http request",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "Analyse Sensordaten",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://169.254.218.116/iolinkmaster/port[8]/iolinkdevice/pdin/getdata",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 400,
+        "y": 300,
+        "wires": [
+            [
+                "b4fa56083bd1829f"
+            ]
+        ]
+    },
+    {
+        "id": "09c1eea475a906a4",
+        "type": "buffer-parser",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "",
+        "data": "payload",
+        "dataType": "msg",
+        "specification": "spec",
+        "specificationType": "ui",
+        "items": [
+            {
+                "type": "int16be",
+                "name": "distance",
+                "offset": 0,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "int8",
+                "name": "distance_scale",
+                "offset": 2,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "bool",
+                "name": "ssc4",
+                "offset": 3,
+                "length": 1,
+                "offsetbit": 5,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "bool",
+                "name": "alarm",
+                "offset": 3,
+                "length": 1,
+                "offsetbit": 3,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "bool",
+                "name": "quality",
+                "offset": 3,
+                "length": 1,
+                "offsetbit": 2,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "bool",
+                "name": "ssc2",
+                "offset": 3,
+                "length": 1,
+                "offsetbit": 1,
+                "scale": "1",
+                "mask": ""
+            },
+            {
+                "type": "bool",
+                "name": "ssc1",
+                "offset": 3,
+                "length": 1,
+                "offsetbit": 0,
+                "scale": "1",
+                "mask": ""
+            }
+        ],
+        "swap1": "",
+        "swap2": "",
+        "swap3": "",
+        "swap1Type": "swap",
+        "swap2Type": "swap",
+        "swap3Type": "swap",
+        "msgProperty": "payload",
+        "msgPropertyType": "str",
+        "resultType": "keyvalue",
+        "resultTypeType": "return",
+        "multipleResult": false,
+        "fanOutMultipleResult": false,
+        "setTopic": true,
+        "outputs": 1,
+        "x": 850,
+        "y": 300,
+        "wires": [
+            [
+                "6ee50797ae6958ff",
+                "808c4c35aa84346b"
+            ]
+        ]
+    },
+    {
+        "id": "b4fa56083bd1829f",
+        "type": "function",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "function 112",
+        "func": "// Überprüfen, ob die empfangenen Daten als String vorliegen\nif (typeof msg.payload.data.value === 'string') {\n    // Konvertiere den HEX-String in einen Buffer\n    msg.payload = Buffer.from(msg.payload.data.value, 'hex');\n} else {\n    node.error(\"data is not a string or not properly formatted\");\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 300,
+        "wires": [
+            [
+                "09c1eea475a906a4"
+            ]
+        ]
+    },
+    {
+        "id": "6ee50797ae6958ff",
+        "type": "function",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "Distance in mmb as String",
+        "func": "\n\nif (msg.payload.distance > 26000) {\n\n    // Wenn OUT of RANGE ist der Value = 0.00\n    msg.payload.distance = 0.00;\n    node.warn(\"Distance OUT of RANGE\");\n    return msg;\n}\n\nif (msg.payload.distance <= 0 ) { //|| msg.payload === undefined\n    msg.payload.distance = 0;\n    return msg;\n} else {\n    msg.payload.distance = msg.payload.distance * Math.pow(10, msg.payload.distance_scale);\n    msg.payload.distance = parseFloat(msg.payload.distance).toFixed(2);\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 300,
+        "wires": [
+            [
+                "8b5792eb8f6aa59d",
+                "79bfde52e257fde1"
+            ]
+        ]
+    },
+    {
+        "id": "9bb965d3d2fddc62",
+        "type": "ui_chart",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "",
+        "group": "d423f9f6fe10ee4c",
+        "order": 1,
+        "width": 14,
+        "height": 8,
+        "label": "Distance",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "3",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1600,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2672aee35ad3b615",
+        "type": "function",
+        "z": "e3c9aea0482e38ad",
+        "d": true,
+        "g": "653793eab2d2847f",
+        "name": "function 117",
+        "func": "let date = new Date();\nlet dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD\n\n// Beispielwerte für Distance und Timestamp\nlet distanceValue = msg.payload.distance;  // Setze hier den tatsächlichen Wert für Distance ein\nlet timestamp = new Date().toLocaleString();  // Konvertiere in lesbares Datumsformat\n\nvar data = [\n    {time:timestamp,distance:distanceValue}\n];\n\n// Datenarray erstellen\nmsg.payload = data\n\n// Datei-Pfad festlegen\nmsg.filename = \"C:\\\\Users\\\\danyal.erguer\\\\Desktop\\\\Test\\\\\" + dateString + \"-Sensor-Daten.csv\"; // Datei auswählen, shift + rechte Maustaste pfad kopieren\n\nreturn { payload: msg.payload, filename: msg.filename}; // Es müssen die Richtigen Eigenschaften zurück gegebne werden sprich payload und filename\n\n// Das Problem warum die csv Formatierung nicht geglückt ist, lag an den \"Regionseinstellungen\", dann \"Weitere Datums-, Uhrzeit- und Ländereinstellungen\", \"Region\", \"Weitere Einstellungen\", dann \"Dezimaltrennzeichen\" auf \".\" setzten und \"Listentrennzeichen\" auf \",\".\n// Dazu folgendes noch in Excel, Datei öffnen, auf \"Daten\", dann \"Text in Spalten\", \"Getrennt\" auswählen weiter, \"Komma\" als \"Trennzeichen\" auswählen und fertig stellen.",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "32714015a907b045"
+            ]
+        ]
+    },
+    {
+        "id": "f166ff6f4093c627",
+        "type": "file",
+        "z": "e3c9aea0482e38ad",
+        "d": true,
+        "g": "653793eab2d2847f",
+        "name": "file path",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "utf8",
+        "x": 420,
+        "y": 220,
+        "wires": [
+            [
+                "038cd652e522091a"
+            ]
+        ]
+    },
+    {
+        "id": "038cd652e522091a",
+        "type": "debug",
+        "z": "e3c9aea0482e38ad",
+        "d": true,
+        "g": "653793eab2d2847f",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "32714015a907b045",
+        "type": "csv",
+        "z": "e3c9aea0482e38ad",
+        "d": true,
+        "g": "653793eab2d2847f",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "once",
+        "multi": "one",
+        "ret": "\\r\\n",
+        "temp": "time,distance,drehwertgeber_counter,drehwertgeber_speed",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": true,
+        "x": 290,
+        "y": 220,
+        "wires": [
+            [
+                "f166ff6f4093c627"
+            ]
+        ]
+    },
+    {
+        "id": "808c4c35aa84346b",
+        "type": "function",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "function 120",
+        "func": "if (msg.payload.distance > 26000) {\n    // Wenn OUT of RANGE ist der Value = 0.00\n    msg.payload.distance = 0.00;\n    node.warn(\"Distance OUT of RANGE\");\n    return msg;\n}\n\nif (msg.payload.distance <= 0 || msg.payload === undefined) {\n    msg.payload.distance = 0;\n    return msg;\n} else {\n    msg.payload.distance = msg.payload.distance * Math.pow(10, msg.payload.distance_scale);\n    msg.payload.distance = parseFloat(msg.payload.distance).toFixed(2);\n\n    // Lichtschranken-Logik hinzufügen\n    if (msg.payload.distance  < 1000) {\n        msg.payload.onOFF = 1;\n    } else {\n        msg.payload.onOFF = 0;\n    }\n\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 240,
+        "wires": [
+            [
+                "5b8b7ecf52fa13e3"
+            ]
+        ]
+    },
+    {
+        "id": "79bfde52e257fde1",
+        "type": "function",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "function 121",
+        "func": "msg.payload = msg.payload.distance\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1430,
+        "y": 300,
+        "wires": [
+            [
+                "9bb965d3d2fddc62"
+            ]
+        ]
+    },
+    {
+        "id": "36eb86bfd55296d4",
+        "type": "ui_chart",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "",
+        "group": "a8279df835d3b032",
+        "order": 1,
+        "width": 14,
+        "height": 8,
+        "label": "Light barrier",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "3",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1390,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5b8b7ecf52fa13e3",
+        "type": "function",
+        "z": "e3c9aea0482e38ad",
+        "g": "653793eab2d2847f",
+        "name": "function 123",
+        "func": "msg.payload = msg.payload.onOFF\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 240,
+        "wires": [
+            [
+                "36eb86bfd55296d4"
+            ]
+        ]
+    },
+    {
+        "id": "d423f9f6fe10ee4c",
+        "type": "ui_group",
+        "name": "Distance",
+        "tab": "3c13dd5f302b75de",
+        "order": 1,
+        "disp": true,
+        "width": "14",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a8279df835d3b032",
+        "type": "ui_group",
+        "name": "Lichtschranke",
+        "tab": "3c13dd5f302b75de",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3c13dd5f302b75de",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
