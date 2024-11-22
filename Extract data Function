@@ -1,0 +1,12 @@
+// Startindex und Anzahl der Datenpunkte, die visualisiert werden sollen
+let startIndex = 69941;
+let limit = 22000; // Anzahl der Datenpunkte, die angezeigt werden sollen
+
+// Extrahiere die "Hoehe"-Werte ab dem Startindex und begrenze die Anzahl der Datenpunkte
+let result = msg.payload.slice(startIndex, startIndex + limit).map(row => row.Hoehe);
+
+// Erstelle das Datenformat für den Chart Node
+//msg.payload = [
+//    { "series": ["Hoehe"], "data": [result], "labels": result.map((_, index) => (startIndex + index).toString()) }
+//];
+return msg;
