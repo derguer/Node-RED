@@ -1,0 +1,80 @@
+[
+    {
+        "id": "8acbaafb62738a4e",
+        "type": "inject",
+        "z": "98d2cde48a205c72",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "reset",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 240,
+        "wires": [
+            [
+                "cd086dca9f43674f"
+            ]
+        ]
+    },
+    {
+        "id": "cd086dca9f43674f",
+        "type": "file in",
+        "z": "98d2cde48a205c72",
+        "name": "Path",
+        "filename": "C:\\\\Users\\\\danyal.erguer\\\\Documents\\\\Batch-Verarbeitung\\\\Testdaten_UBT_2024_01_02.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 330,
+        "y": 240,
+        "wires": [
+            [
+                "778dc4d23f9e224d"
+            ]
+        ]
+    },
+    {
+        "id": "778dc4d23f9e224d",
+        "type": "csv",
+        "z": "98d2cde48a205c72",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "once",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 470,
+        "y": 240,
+        "wires": [
+            [
+                "f2de91cc3fcdc5fe",
+                "53332d02788c6fba",
+                "3eec877945b249b0",
+                "1126cc1d37aafcbb",
+                "dbd487dbe00380da",
+                "2cb88802fec33aa9"
+            ]
+        ]
+    }
+]
